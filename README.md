@@ -1,2 +1,2 @@
-# ofdma-doxygen-logging
-spdlog + doxygen
+# ofdma-doxygen
+logging+doxygen document
