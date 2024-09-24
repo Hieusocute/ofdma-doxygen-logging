@@ -59,8 +59,8 @@ void printEvents()
   std::list<event>::iterator it;
   spdlog::trace("Print all events of list");
   for(it=events.begin(); it!=events.end(); it++) { // get output stream, print data of each event instance
-  if (it->m_type==0) spdlog::debug("Event: Arrival / dest= {} / time= {}", it->m_dest.m_no, it->m_time);
-  else spdlog::debug("Event: Transmission / dest= {} / time= {}", it->m_dest.m_no, it->m_time);
+          if (it->m_type==0) spdlog::debug("Event: Arrival / dest= {} / time= {}", it->m_dest.m_no, it->m_time);
+          else spdlog::debug("Event: Transmission / dest= {} / time= {}", it->m_dest.m_no, it->m_time);
   }
 }
 
@@ -165,7 +165,7 @@ void logger(string level_log)
 void simulateQueue(list<packet> &buffer, int discipline)      // given packet list and discipline
 { 
   int nbOfTransmissions=0;
-  int maxTransmission=5;
+  int maxTransmission=1000;
   double timeToTransmit;
   
   
@@ -181,7 +181,9 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
       addNextArrival(*it);               // all arrival is added (starting simulation)
     } 
   }
+  spdlog::debug("Event list before processed");
   printEvents();                    // Print all the event added (all sorted)
+
 
   while (nbOfTransmissions < maxTransmission)
 {
