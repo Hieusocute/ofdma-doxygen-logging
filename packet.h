@@ -3,6 +3,24 @@
 
 #include "destination.h"
 
+/**
+ * @class packet
+ * @brief Represents a network packet in the simulation.
+ * 
+ * This class models a packet, including its size, arrival time, 
+ * and destination information.
+ * 
+ * ##### Attributes:
+ * 
+ * - int m_size:  
+ *   The size of the packet in bytes.
+ * 
+ * - double m_arrival:  
+ *   The time when the packet arrives.
+ * 
+ * - destination m_destination:  
+ *   The destination to which the packet is sent.
+ */
 class packet {
 	public:
 		int			m_size; 		   //size in bytes
