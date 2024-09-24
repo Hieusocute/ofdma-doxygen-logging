@@ -12,9 +12,9 @@ with open(input_file_path, 'r') as file:
     log_data = file.read()
 
 # Regular expression to match the pattern and extract the random exponential value
-pattern_time = r'DEBUG: An event is added: Event: arrival / dest= \d+ / time = ([\d.]+)'
+pattern_time = r'\[.*?\] \[.*?\] \[debug\] Event: Arrival / dest= \d+ / time= ([\d.]+)'
 
-pattern_rand = r'DEBUG: rand exp value: ([\d.]+)'
+pattern_rand = r'\[.*?\] \[.*?\] \[debug\] rand exp value: ([\d.]+)'
 
 # Find all matching lines and extract the values
 rand_values = re.findall(pattern_rand, log_data)
