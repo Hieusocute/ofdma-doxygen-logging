@@ -560,7 +560,9 @@ double fifoOFDMAOptimal(std::list<packet> &buffer, double currentTime)
     std::vector<int> optimalRU = ruAllocationOptimal(*newDestListIt);
     
     for (auto it = newDestListIt->begin(); it != newDestListIt->end(); it++) {
-        spdlog::info("Packet info: PhyRate = {}, packetSize = {}, arrivalTime = {}",
+        spdlog::info("Packet info: Destination = {}, mcs = {}, phyRate = {}, packetSize = {}, arrivalTime = {}",
+                     it->m_destination.m_no,
+                     it->m_destination.m_mcs,
                      it->m_destination.m_phyRate, 
                      it->m_size, 
                      it->m_arrival);
