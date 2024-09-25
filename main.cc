@@ -188,6 +188,7 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
   while (nbOfTransmissions < maxTransmission)
 {
     std::list<event>::iterator it;              // iterate each element on event list
+    std::vector<destination>::iterator itDest;
 
     //What is the next event
     spdlog::debug("Queue component, current list of events");
@@ -234,8 +235,18 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
         if (thisEvent.m_dest.m_arrivalDistribution == 0) {spdlog::trace("How set up the next arrival => case 0: timeCalculate=currentTime+1.0/dest.m_arrivalRate");}
         else {spdlog::trace("set up the next arrival => case 1:  double value=getSampleExpDistribution(dest.m_arrivalRate)/(dest.m_arrivalRate*13)");}
         addNextArrival(thisEvent.m_dest);//schedule the next arrival for this destination => cause infinitty
-          class packet newPacket(3000,currentTime,thisEvent.m_dest);//1000 bytes (needs to be changed) // create new packet
+          class packet newPacket(2000,currentTime,thisEvent.m_dest);//1000 bytes (needs to be changed) // create new packet
           // class packet newPacket1(2000, currentTime,1);
+
+        for (auto itDest = destinations.begin(); itDest != destinations.end(); ++itDest){
+          int i = 1;
+          if (itDest->m_no == thisEvent.m_dest.m_no){
+            continue;
+          } else{
+            buffer.emplace_back(1000, currentTime, *itDest);
+          }
+        }
+
           spdlog::info("new packet size = {}, destination = {}, time arrival = {}",newPacket.m_size,newPacket.m_destination.m_no,newPacket.m_arrival);
           // spdlog::info("new packet size = {}, destination = {}, time arrival = {}",newPacket1.m_size,newPacket1.m_destination.m_no,newPacket1.m_arrival);
           // add buffer for the transmission is scheduled
@@ -298,13 +309,10 @@ int main(int argc, char* argv[])
   //Set destination 
   // class destination dest1(1,1,500.0,0), dest2(2,1,500.0,0), dest3(3,1,500.0,0); 
 
-  class destination dest1(1,1,500.0,1), dest2(2,1,400.0,1), dest3(3,1,320.0,1), dest4(4,1,600.0,1), dest5(5,1,275.0,1), dest6(6,1,330.0,1);
+  class destination dest1(1,1,500.0,1), dest2(2,1,400.0,1), dest3(3,1,320.0,1);
   destinations.push_back(dest1);
   destinations.push_back(dest2);
   destinations.push_back(dest3);
-  destinations.push_back(dest4);
-  destinations.push_back(dest5);
-  destinations.push_back(dest6);
 
    
   //class packet myPacket(1,2,3);
