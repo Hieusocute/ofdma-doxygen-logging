@@ -25,14 +25,6 @@ list<packet> buffer;				//The buffer
 
 mt19937 engine;						//The random number generator (the discrete one)
 
-//Functions
-
-
-// double getSampleExpDistribution(double lambda)//lambda is 1/E[X]   
-// {
-//   std::exponential_distribution<> randomFlot(lambda);
-//   return(randomFlot(engine));
-// }
 
 /**
  * @brief Get the Sample Poisson Distribution object, lambda is the mean of the Poisson distribution
@@ -41,7 +33,7 @@ mt19937 engine;						//The random number generator (the discrete one)
  * @return int 
  */
 
-int getSampleExpDistribution(double lambda) // lambda is the mean of the Poisson distribution
+int getSamplePoissonDistribution(double lambda) // lambda is the mean of the Poisson distribution
 {
     std::poisson_distribution<> randomInt(lambda);
     return randomInt(engine);
@@ -104,7 +96,7 @@ void addNextArrival(class destination dest)  // given destination
     case 0: timeCalculate=currentTime+1.0/dest.m_arrivalRate; break;      // case 0 is deterministic, time = current + 1/ numbers of packet => time per packet
     case 1:                                                               // Poisson distribution
     {//Les accolades sont necessaires car elle fixe la portee de la declaration de la variable ci-dessous
-	    double value=getSampleExpDistribution(dest.m_arrivalRate)/(dest.m_arrivalRate*13);    // time based of arrival rate
+	    double value=getSamplePoissonDistribution(dest.m_arrivalRate)/(dest.m_arrivalRate*13);    // time based of arrival rate
 	    timeCalculate=currentTime+value;      // time = current time + arrival time
       spdlog::debug("rand exp value: {}", value);
 	    break;
@@ -233,7 +225,7 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
         spdlog::info("Queue component, an Arrival event comes. Before addNextArrival(), number of Packet in Buffer = {}", buffer.size());        
 
         if (thisEvent.m_dest.m_arrivalDistribution == 0) {spdlog::trace("How set up the next arrival => case 0: timeCalculate=currentTime+1.0/dest.m_arrivalRate");}
-        else {spdlog::trace("set up the next arrival => case 1:  double value=getSampleExpDistribution(dest.m_arrivalRate)/(dest.m_arrivalRate*13)");}
+        else {spdlog::trace("set up the next arrival => case 1:  double value=getSamplePoissonDistribution(dest.m_arrivalRate)/(dest.m_arrivalRate*13)");}
         addNextArrival(thisEvent.m_dest);//schedule the next arrival for this destination => cause infinitty
           class packet newPacket(2000,currentTime,thisEvent.m_dest);//1000 bytes (needs to be changed) // create new packet
           // class packet newPacket1(2000, currentTime,1);
@@ -243,7 +235,10 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
           if (itDest->m_no == thisEvent.m_dest.m_no){
             continue;
           } else{
-            buffer.emplace_back(1000, currentTime, *itDest);
+            class packet additionalPacket(1000, currentTime, *itDest);
+            buffer.emplace_back(additionalPacket);
+            spdlog::info("New packet added: size = {}, destination = {}, arrival time = {}", 
+                 additionalPacket.m_size, additionalPacket.m_destination.m_no, additionalPacket.m_arrival);
           }
         }
 
@@ -302,17 +297,20 @@ int main(int argc, char* argv[])
 
   logger(level_log);
 
-  int nbOfDest=2;	
+  int nbOfDest=3;	
   /* initialize random seed: */
   srand (time(NULL));
 
   //Set destination 
   // class destination dest1(1,1,500.0,0), dest2(2,1,500.0,0), dest3(3,1,500.0,0); 
 
-  class destination dest1(1,1,500.0,1), dest2(2,1,400.0,1), dest3(3,1,320.0,1);
+  // class destination dest1(1,1,500.0,0), dest2(2,1,400.0,0), dest3(3,1,320.0,0), dest4(4,4,300.0,0); // Deterministic
+  class destination dest1(1,1,500.0,1), dest2(2,1,400.0,1), dest3(3,1,320.0,1), dest4(4,4,300.0,1);   // Poisson
+
   destinations.push_back(dest1);
   destinations.push_back(dest2);
   destinations.push_back(dest3);
+  destinations.push_back(dest4);
 
    
   //class packet myPacket(1,2,3);
