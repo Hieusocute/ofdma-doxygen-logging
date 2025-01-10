@@ -3,6 +3,6 @@ logging+doxygen document
 
 ## How to run
 
-./run.sh
+./run.sh <info/trace/debug>
 
 
