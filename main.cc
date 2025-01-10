@@ -297,7 +297,7 @@ int main(int argc, char* argv[])
 
   logger(level_log);
 
-  int nbOfDest=3;	
+  int nbOfDest=4;	
   /* initialize random seed: */
   srand (time(NULL));
 
