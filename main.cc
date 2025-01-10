@@ -301,9 +301,7 @@ int main(int argc, char* argv[])
   /* initialize random seed: */
   srand (time(NULL));
 
-  //Set destination 
-  // class destination dest1(1,1,500.0,0), dest2(2,1,500.0,0), dest3(3,1,500.0,0); 
-
+  // Set destination 
   // class destination dest1(1,1,500.0,0), dest2(2,1,400.0,0), dest3(3,1,320.0,0), dest4(4,4,300.0,0); // Deterministic
   class destination dest1(1,1,500.0,1), dest2(2,1,400.0,1), dest3(3,1,320.0,1), dest4(4,4,300.0,1);   // Poisson
 
@@ -312,13 +310,7 @@ int main(int argc, char* argv[])
   destinations.push_back(dest3);
   destinations.push_back(dest4);
 
-   
-  //class packet myPacket(1,2,3);
-  //cout << myPacket.m_destination << endl;
-  //buffer.push_back(myPacket);
-
   //The simulator
-  
   simulateQueue(buffer, 1);
 
   return(0);
