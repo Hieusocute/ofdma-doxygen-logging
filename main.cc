@@ -181,7 +181,7 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
 {
     std::list<event>::iterator it;              // iterate each element on event list
     std::vector<destination>::iterator itDest;
-
+    spdlog::warn("[---------------------------NEW ITERATION----------------------]");
     //What is the next event
     spdlog::debug("Queue component, current list of events");
     printEvents();
@@ -206,9 +206,11 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
         spdlog::trace("Handling arrival event");
         spdlog::debug("Current time = {}, StopTxTime = {}", currentTime, stopTxTime);
         if(buffer.empty() && (currentTime > stopTxTime)) {
+          spdlog::warn("IF");
           spdlog::trace("empty buffer and current time is greater than stop transmission time");
           scheduleNextTransmission(currentTime); }             // If sending all packet, and current time is greater than scheduled for each transmission time => schedule the next transmission is the current time
         else if(buffer.size()>0 && currentTime < stopTxTime && thisEvent.m_dest.m_arrivalDistribution == 0){      // if have packets in buffer when scheduling, send it immediately
+              spdlog::warn("Else 1");
               spdlog::trace("Cause of Deterministic, send the buffer immediatly");
               spdlog::info("Current time before update = {}", currentTime);
               currentTime = currentTime + transmitNextPackets(discipline, buffer, currentTime);           // Update current time    (This case only happens in Deterministic mode)
@@ -217,6 +219,7 @@ void simulateQueue(list<packet> &buffer, int discipline)      // given packet li
               spdlog::info("Number of transmission completed = {}", nbOfTransmissions);
         }
         else{ 
+          spdlog::warn("Else 2");
           spdlog::trace("empty buffer and current time is lesser than stop tranmission time");
           scheduleNextTransmission(stopTxTime);
         }

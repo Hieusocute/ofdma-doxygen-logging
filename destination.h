@@ -32,8 +32,7 @@ class destination {
 		int		m_mcs;					//MCS index
 		double	m_phyRate;				//Physical Trans Rate (Mbit/s) 
 		double	m_arrivalRate;			//Number of packet per second for this source
-		int		m_arrivalDistribution;	// describe the time intervals between events in a process. 
-										//Type of distribution for the interarrival: Deterministic (0) time between events is constant,
+		int		m_arrivalDistribution;	//Type of distribution for the interarrival: Deterministic (0) time between events is constant,
 										// 											 Poisson(1), etc.: random events that occur independently and with a constant average rate. 
 
 //phyRate will be set according to the mcs in the constructor (in the .cc file)
